@@ -4,7 +4,7 @@ using namespace std;
 int main()
 	{
 	Sudoku ss;
-	ss.ReadIn();
-	ss.Solve();
+	ss.ReadIn();//讀數讀
+	ss.Solve();//解數獨
 	return 0;
 	}

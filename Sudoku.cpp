@@ -7,6 +7,7 @@ using namespace std;
 void Sudoku::GiveQuestion()
 	{
 	srand((unsigned)time(NULL));
+	//先給a到i九個變數從1到9不同的值
 	int a,b,c,d,e,f,g,h,i,j,k,l;
 	a=rand()%9+1;
 	b=rand()%9+1;
@@ -33,6 +34,7 @@ void Sudoku::GiveQuestion()
 	i=rand()%9+1;
 	while(i==a||i==b||i==c||i==d||i==e||i==f||i==g||i==h)
 		i=rand()%9+1;
+	//將a到i存入一個已經做好的矩陣
 	int aa[12][12]={{0,0,i,0,0,0,-1,-1,-1,b,0,0},
 			{0,0,0,c,0,0,-1,-1,-1,h,0,g},
 			{0,b,0,0,g,0,-1,-1,-1,0,0,d},
@@ -45,6 +47,7 @@ void Sudoku::GiveQuestion()
 			{c,a,b,-1,-1,-1,0,d,e,i,g,0},
 			{0,0,0,-1,-1,-1,0,a,b,f,d,0},
 			{f,d,e,-1,-1,-1,i,g,0,0,a,0}};
+	//鏡射
 	l=rand()%2;
 	if(l==1)
 		{
@@ -62,6 +65,7 @@ void Sudoku::GiveQuestion()
                                 map[j][k]=aa[k][j];
                         }
 		}
+	//將數獨印出來
 	for(j=0;j<12;j++)
 		{
 		for(k=0;k<12;k++)
@@ -72,6 +76,7 @@ void Sudoku::GiveQuestion()
 void Sudoku::ReadIn()
 	{
 	int a,b;
+	//將數獨存入map
 	for(a=0;a<12;a++)
                 {
                 for(b=0;b<12;b++)
@@ -81,6 +86,7 @@ void Sudoku::ReadIn()
 int Sudoku::compare(int a,int b,int c)
 	{
 	int l,m,n=(a/3)*3+3,o=(b/3)*3+3;
+	//比較直行橫列如果有一樣的數字就傳回0
 	for(l=0;l<12;l++)
 		{
 		if(map[l][b]==c)
@@ -88,7 +94,7 @@ int Sudoku::compare(int a,int b,int c)
 		if(map[a][l]==c)
 			return 0;
 		}
-	
+	//比較九宮格如果有一樣的數字就傳回0
 	for(l=(a/3)*3;l<n;l++)
 		{
 		for(m=(b/3)*3;m<o;m++)
@@ -97,11 +103,13 @@ int Sudoku::compare(int a,int b,int c)
 				return 0;
 			}
 		}
+	//如果都沒有一樣的數字就傳回1
 	return 1;
 	}
 void Sudoku::Solverec()
 	{
 	int a,b,c,t=0;
+	//先將不是0的格子數記錄下來
 	for(a=0;a<12;a++)
 		{
 		for(b=0;b<12;b++)
@@ -110,6 +118,8 @@ void Sudoku::Solverec()
 				t++;
 			}
 		}
+	//如果不是0的格子數有144個就代表有解並將記錄幾個解的ans加加
+	//然後把正解的數獨存出來
 	if(t==144)
 		{
 		ans++;
@@ -118,9 +128,12 @@ void Sudoku::Solverec()
 			for(b=0;b<12;b++)
 				mapans[a][b]=map[a][b];
 			}
+		//如果有兩組解就跳出
 		if(ans>=2)
 			return;
 		}
+	//一個一個格子跑，如果遇到0的話就開始給數字，然後判斷可不可以填入
+	//如果可以填入的話在呼叫recursive跑下一個
 	for(a=0;a<12;a++)
 		{
 		for(b=0;b<12;b++)
@@ -133,11 +146,15 @@ void Sudoku::Solverec()
 						{
 						map[a][b]=c;
 						Solverec();
+						//每次呼叫完recursive後將剛剛填的格子變回0
+						//這樣才可以繼續看有沒有第二組解
 						map[a][b]=0;
+						//如果有兩組解就直接跳出
 						if(ans>=2)
 							return;
 						}
 					}
+				//如果跑完1到9都不能存進去就代表這格沒有解就跳出
 				return;
 				}
 			}
@@ -148,6 +165,7 @@ void Sudoku::Solve()
 	int a,b;
 	ans=0;
 	Solverec();
+	//印出無解、一組解或兩組解，如果是一組解的話把正解的數獨印出來
 	if(ans==0)
 		cout<<"0"<<endl;
 	if(ans==1)

@@ -4,6 +4,6 @@ using namespace std;
 int main()
 	{
 	Sudoku ss;
-	ss.GiveQuestion();
+	ss.GiveQuestion();//出答案
 	return 0;
 	}
